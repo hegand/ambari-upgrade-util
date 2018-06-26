@@ -1,4 +1,5 @@
 from subprocess import check_output, CalledProcessError
+from time import sleep
 
 from sh_error import HstError,AmbariServerError
 
@@ -51,6 +52,7 @@ class AmbariServer(object):
             print("Stopping ambari-server...")
             if self.check_if_running():
                 check_output(["sudo",self.client_path,"stop"])
+                sleep(10)
             else:
                 raise AmbariServerError("Ambari server is not running")
             if self.check_if_running():
@@ -63,6 +65,7 @@ class AmbariServer(object):
         try:
             print("Starting ambari-server...")
             check_output(["sudo",self.client_path,"start"])
+            sleep(10)
             if not self.check_if_running():
                 raise AmbariServerError("Starting ambari-server was not successful, please check")
             print("Ambari server has been started successfully")

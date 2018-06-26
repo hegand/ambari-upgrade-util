@@ -67,7 +67,6 @@ def main(argv):
         # ac.switch_service_state("STARTED","KNOX")
         # ac.turn_off_maintenance_mode_for_service("KNOX")
         ambari_server.stop()
-        sleep(10)
         ambari_server.start()
     except AmbariError as e:
         print(e.message)
