@@ -10,12 +10,12 @@ class HstClient(object):
     def get_client_path(self, client_path):
         if not client_path:
             try:
-                return check_output(["which","hst"])
+                return check_output(["which","hst"]).split("\n")[0]
             except CalledProcessError as e:
                 raise HstError("hst executeble is not on the PATH, please provide a valid path or install hst")
         else:
             try:
-                check_output(["hst","--version"])
+                check_output([client_path,"--version"])
                 return client_path
             except OSError as e:
                 raise HstError("hst path is not valid: {0}".format(e.strerror))
@@ -23,6 +23,7 @@ class HstClient(object):
     def capture_bundle(self):
         try:
             path = self.client_path
+            print("Capturing smartsense bundle...")
             check_output([path,"capture"])
             print("Smartsense boundle captured")
         except CalledProcessError as e:
@@ -36,24 +37,24 @@ class AmbariServer(object):
     def get_path(self, client_path):
         if not client_path:
             try:
-                return check_output(["which","ambari-server"])
+                return check_output(["which","ambari-server"]).split("\n")[0]
             except CalledProcessError as e:
                 raise AmbariServerError("ambari-server executeble is not on the PATH, please provide a valid path or install ambari-server")
         else:
             try:
-                check_output(["ambari-server","--version"])
+                check_output([client_path,"--version"])
                 return client_path
             except OSError as e:
                 raise AmbariServerError("ambari-server path is not valid: {0}".format(e.strerror))
 
-    def stop_ambari_server(self):
+    def stop(self):
         try:
-            check_output(["sudo","ambari-server stop"])
+            check_output(["sudo",self.client_path,"stop"])
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during stopping ambari-server: {0}".format(e.message))
 
-    def start_ambari_server(self):
+    def start(self):
         try:
-            check_output(["sudo","ambari-server start"])
+            check_output(["sudo",self.client_path,"start"])
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during starting ambari-server: {0}".format(e.message))
