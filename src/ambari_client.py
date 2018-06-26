@@ -61,8 +61,16 @@ class AmbariClient(object):
     def put(self, url, data):
         return self.request(url, data, "PUT")
 
+    def get_hosts(self):
+        url = "{0}hosts/".format(self.base_url)
+        resp = self.get_json(url)
+        try:
+            return [x["Hosts"]["host_name"] for x in resp["items"]]
+        except KeyError as e:
+            raise AmbariError("Server response is not valid or empty, please check")
+
     def get_service_list(self):
-        url = self.base_url + "services/"
+        url = "{0}services/".format(self.base_url)
         resp = self.get_json(url)
         try:
             return [x["ServiceInfo"]["service_name"] for x in resp["items"]]
@@ -70,7 +78,7 @@ class AmbariClient(object):
             raise AmbariError("Server response is not valid or empty, please check")
 
     def get_service_info(self, service_name):
-        url = self.base_url + "services/{0}".format(service_name)
+        url = "{0}services/{1}".format(self.base_url,service_name)
         return self.get_json(url)
 
     def get_service_maintenance_state(self, service_name):
@@ -124,7 +132,7 @@ class AmbariClient(object):
             raise AmbariError("{0} is not available on this cluster".format(service_name))
         if action == self.get_service_state(service_name):
             raise AmbariError("{0} is already in {1} state on this cluster".format(service_name,action))
-        url = self.base_url + "services/{0}".format(service_name)
+        url = "{0}services/{1}".format(self.base_url,service_name)
         payload = ServiceStartStopPayloadTemplate(action,self.cluster_name,service_name).get()
         self.put(url, payload)
         i = 0

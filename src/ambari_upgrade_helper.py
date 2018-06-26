@@ -41,8 +41,8 @@ def main(argv):
         config = json.loads(open(config_file, "r").read())
         global ac
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
-        hst = HstClient()
-        ambari_server = AmbariServer()
+        #hst = HstClient()
+        #ambari_server = AmbariServer()
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -66,8 +66,9 @@ def main(argv):
         # sleep(5)
         # ac.switch_service_state("STARTED","KNOX")
         # ac.turn_off_maintenance_mode_for_service("KNOX")
-        ambari_server.stop()
-        ambari_server.start()
+        # ambari_server.stop()
+        # ambari_server.start()
+        print ac.get_hosts()
     except AmbariError as e:
         print(e.message)
         exit(1)
