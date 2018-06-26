@@ -5,8 +5,8 @@ from time import sleep
 
 from ambari_client import AmbariClient
 from ambari_error import AmbariError
-from sh_client import HstClient
-from sh_error import HstError
+from sh_client import HstClient,AmbariServer
+from sh_error import HstError,AmbariServerError
 
 
 def print_help():
@@ -41,7 +41,8 @@ def main(argv):
         config = json.loads(open(config_file, "r").read())
         global ac
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
-        hst = HstClient("/usr/sbin/hst")
+        hst = HstClient()
+        ambari_server = AmbariServer()
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -54,14 +55,19 @@ def main(argv):
     except HstError as e:
         print(e.message)
         exit(1)
+    except AmbariServerError as e:
+        print(e.message)
+        exit(1)
 
     try:
-        hst.capture_bundle()
-        ac.turn_on_maintenance_mode_for_service("KNOX")
-        ac.switch_service_state("INSTALLED","KNOX")
-        sleep(5)
-        ac.switch_service_state("STARTED","KNOX")
-        ac.turn_off_maintenance_mode_for_service("KNOX")
+        # hst.capture_bundle()
+        # ac.turn_on_maintenance_mode_for_service("KNOX")
+        # ac.switch_service_state("INSTALLED","KNOX")
+        # sleep(5)
+        # ac.switch_service_state("STARTED","KNOX")
+        # ac.turn_off_maintenance_mode_for_service("KNOX")
+        ambari_server.stop()
+        ambari_server.start()
     except AmbariError as e:
         print(e.message)
         exit(1)
