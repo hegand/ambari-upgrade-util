@@ -60,7 +60,7 @@ def main(argv):
         exit(1)
 
     try:
-        hst.capture_bundle()
+        # hst.capture_bundle()
         # ac.turn_on_maintenance_mode_for_service("KNOX")
         # ac.switch_service_state("INSTALLED","KNOX")
         # sleep(5)

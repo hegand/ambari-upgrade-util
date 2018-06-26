@@ -48,12 +48,16 @@ class AmbariServer(object):
 
     def stop(self):
         try:
+            print("Stopping ambari-server...")
             check_output(["sudo",self.client_path,"stop"])
+            print("Ambari server has been stopped successfully")
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during stopping ambari-server: {0}".format(e.message))
 
     def start(self):
         try:
+            print("Starting ambari-server...")
             check_output(["sudo",self.client_path,"start"])
+            print("Ambari server has been started successfully")
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during starting ambari-server: {0}".format(e.message))
