@@ -49,12 +49,15 @@ class AmbariServer(object):
     def stop(self):
         try:
             print("Stopping ambari-server...")
-            check_output(["sudo",self.client_path,"stop"])
+            if self.check_if_running():
+                check_output(["sudo",self.client_path,"stop"])
+            else:
+                raise AmbariServerError("Ambari server is not running")
             if self.check_if_running():
                 raise AmbariServerError("Stopping ambari-server was not successful, please check")
             print("Ambari server has been stopped successfully")
         except CalledProcessError as e:
-            raise AmbariServerError("Some problem have been occurred during stopping ambari-server")
+            raise AmbariServerError("Some problems have been occurred during stopping ambari-server")
 
     def start(self):
         try:
@@ -64,7 +67,7 @@ class AmbariServer(object):
                 raise AmbariServerError("Starting ambari-server was not successful, please check")
             print("Ambari server has been started successfully")
         except CalledProcessError as e:
-            raise AmbariServerError("Some problem have been occurred during starting ambari-server")
+            raise AmbariServerError("Some problems have been occurred during starting ambari-server")
 
     def check_if_running(self):
         try:
