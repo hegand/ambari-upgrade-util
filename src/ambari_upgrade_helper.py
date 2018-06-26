@@ -74,6 +74,9 @@ def main(argv):
     except HstError as e:
         print(e.message)
         exit(1)
+    except AmbariServerError as e:
+        print(e.message)
+        exit(1)
 
 
 if __name__== "__main__":
