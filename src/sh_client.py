@@ -22,9 +22,8 @@ class HstClient(object):
 
     def capture_bundle(self):
         try:
-            path = self.client_path
             print("Capturing smartsense bundle...")
-            check_output([path,"capture"])
+            check_output("sudo " + [self.client_path,"capture"])
             print("Smartsense boundle captured")
         except CalledProcessError as e:
             raise HstError("Smartsense capture has been failed, please check hst logs for details")
@@ -49,12 +48,12 @@ class AmbariServer(object):
 
     def stop(self):
         try:
-            check_output(["sudo",self.client_path,"stop"])
+            check_output(["sudo " + self.client_path,"stop"])
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during stopping ambari-server: {0}".format(e.message))
 
     def start(self):
         try:
-            check_output(["sudo",self.client_path,"start"])
+            check_output(["sudo " + self.client_path,"start"])
         except CalledProcessError as e:
             raise AmbariServerError("Some problem have been occurred during starting ambari-server: {0}".format(e.message))
