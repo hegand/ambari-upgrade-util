@@ -68,6 +68,7 @@ def main(argv):
         # ac.turn_off_maintenance_mode_for_service("KNOX")
         # ambari_server.stop()
         # ambari_server.start()
+        print ac.get_hosts()
         for host in ac.get_hosts():
             aa = AmbariAgent(host, None, "root")
             aa.stop()
