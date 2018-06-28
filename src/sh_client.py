@@ -90,11 +90,11 @@ class AmbariServer(ShClient):
 class SshClient(object):
     def __init__(self, hostname, username=None, runasuser=None):
         command = ["ssh"]
-        if runasuser:
+        if runasuser is not None:
             command.append("{0}@{1}".format(username,hostname))
         else:
             command.append(hostname)
-        if username:
+        if username is not None:
             command = ["sudo","-u",runasuser] + command
         self.base_command = command + ["TERM=dumb"]
         self.hostname = hostname
