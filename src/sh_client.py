@@ -88,14 +88,14 @@ class AmbariServer(ShClient):
 
 
 class SshClient(object):
-    def __init__(self, hostname, username=None, runasuser=None):
+    def __init__(self, hostname, remoteuser=None, runaslocaluser=None):
         command = ["ssh"]
-        if runasuser is not None:
-            command.append("{0}@{1}".format(username,hostname))
+        if remoteuser is not None:
+            command.append("{0}@{1}".format(remoteuser,hostname))
         else:
             command.append(hostname)
-        if username is not None:
-            command = ["sudo","-u",runasuser] + command
+        if runaslocaluser is not None:
+            command = ["sudo","-u", runaslocaluser] + command
         self.base_command = command + ["TERM=dumb"]
         self.hostname = hostname
         self.checking()
@@ -121,8 +121,8 @@ class SshClient(object):
 
 
 class AmbariAgent(SshClient):
-    def __init__(self, hostname, username=None, runasuser=None):
-        SshClient.__init__(self,hostname,username,runasuser)
+    def __init__(self, hostname, remoteuser=None, runaslocaluser=None):
+        SshClient.__init__(self, hostname, remoteuser, runaslocaluser)
 
     def stop(self):
         print("Stopping ambari-agent on {0}...".format(self.hostname))

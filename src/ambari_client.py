@@ -29,7 +29,7 @@ class AmbariClient(object):
 
     def request(self, url, data, type=None):
         request = urllib2.Request(url, data, {"X-Requested-By": "ambari", "Authorization": "Basic {0}".format(self.creds)})
-        if type:
+        if type is not None:
             request.get_method = lambda: type
         try:
             connection = urllib2.urlopen(request)
