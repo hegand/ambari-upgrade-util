@@ -70,7 +70,7 @@ def main(argv):
             ac.turn_on_maintenance_mode_for_service(service)
             ac.stop_service(service)
             sleep(5)
-            ac.stop_service(service)
+            ac.start_service(service)
             ac.turn_off_maintenance_mode_for_service(service)
         asc.stop()
         asc.start()
