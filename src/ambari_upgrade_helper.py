@@ -5,7 +5,7 @@ from time import sleep
 
 from ambari_client import AmbariClient
 from ambari_error import AmbariError
-from sh_client import HstClient,AmbariServer,SshClient,AmbariAgent
+from sh_client import *
 from sh_error import ShError,SshError
 
 
@@ -39,11 +39,13 @@ def main(argv):
             print("Please set the correct permission on the config file, aborting...")
             exit(1)
         config = json.loads(open(config_file, "r").read())
-        global ac
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
-        hst = HstClient()
-        ambari_server = AmbariServer()
-        ambari_agents = [AmbariAgent(host, None, "root") for host in ac.get_hosts()]
+        shc = ShClient()
+        hst = HstClient(shc)
+        asc = AmbariServerClient(shc)
+        #ssh = SshClient("34.254.55.199","cloudbreak")
+        #aa = AmbariAgent(ssh)
+        ssh_clients = dict((host,SshClient(host, "root")) for host in ac.get_hosts())
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -61,15 +63,16 @@ def main(argv):
         exit(1)
 
     try:
-        #hst.capture_bundle()
+        # hst.capture_bundle()
         # ac.turn_on_maintenance_mode_for_service("KNOX")
         # ac.switch_service_state("INSTALLED","KNOX")
         # sleep(5)
         # ac.switch_service_state("STARTED","KNOX")
         # ac.turn_off_maintenance_mode_for_service("KNOX")
-        ambari_server.stop()
-        ambari_server.start()
-        for aa in ambari_agents:
+        # asc.stop()
+        # asc.start()
+        for host, ssh in ssh_clients.iteritems():
+            aa = AmbariAgent(ssh)
             aa.stop()
             aa.start()
     except AmbariError as e:
