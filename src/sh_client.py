@@ -81,7 +81,6 @@ class AmbariServer(ShClient):
 
     def running(self):
         try:
-            self.run(["[ -f /var/run/ambari-server/ambari-server.pid ] && exit || exit 1"],"root")
             self.run(["ambari-server","status"],"root")
             return True
         except ShError as e:
@@ -149,7 +148,6 @@ class AmbariAgent(SshClient):
 
     def running(self):
         try:
-            self.run(["[ -f /var/run/ambari-agent/ambari-agent.pid ] && exit || exit 1"],"root")
             self.run(["ambari-agent","status"],"root")
             return True
         except SshError as e:

@@ -43,6 +43,7 @@ def main(argv):
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
         hst = HstClient()
         ambari_server = AmbariServer()
+        ambari_agents = [AmbariAgent(host, None, "root") for host in ac.get_hosts()]
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -60,7 +61,7 @@ def main(argv):
         exit(1)
 
     try:
-        hst.capture_bundle()
+        #hst.capture_bundle()
         # ac.turn_on_maintenance_mode_for_service("KNOX")
         # ac.switch_service_state("INSTALLED","KNOX")
         # sleep(5)
@@ -68,9 +69,7 @@ def main(argv):
         # ac.turn_off_maintenance_mode_for_service("KNOX")
         ambari_server.stop()
         ambari_server.start()
-        print ac.get_hosts()
-        for host in ac.get_hosts():
-            aa = AmbariAgent(host, None, "root")
+        for aa in ambari_agents:
             aa.stop()
             aa.start()
     except AmbariError as e:
