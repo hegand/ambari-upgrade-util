@@ -47,8 +47,6 @@ def main(argv):
         shc = ShClient()
         hst = HstClient(shc)
         asc = AmbariServerClient(shc)
-        #ssh = SshClient("34.254.55.199","cloudbreak")
-        #aa = AmbariAgent(ssh)
         ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
     except OSError as e:
         print(e.strerror)
@@ -67,14 +65,14 @@ def main(argv):
         exit(1)
 
     try:
-        # hst.capture_bundle()
+        hst.capture_bundle()
         # ac.turn_on_maintenance_mode_for_service("KNOX")
         # ac.switch_service_state("INSTALLED","KNOX")
         # sleep(5)
         # ac.switch_service_state("STARTED","KNOX")
         # ac.turn_off_maintenance_mode_for_service("KNOX")
-        # asc.stop()
-        # asc.start()
+        asc.stop()
+        asc.start()
         for host, ssh in ssh_clients.iteritems():
             print("SSH into {0} host".format(host))
             aa = AmbariAgent(ssh)
