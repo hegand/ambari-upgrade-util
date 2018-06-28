@@ -45,7 +45,7 @@ def main(argv):
         asc = AmbariServerClient(shc)
         #ssh = SshClient("34.254.55.199","cloudbreak")
         #aa = AmbariAgent(ssh)
-        ssh_clients = dict((host,SshClient(host, "root")) for host in ac.get_hosts())
+        ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
     except OSError as e:
         print(e.strerror)
         exit(1)
