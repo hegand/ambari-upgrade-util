@@ -5,8 +5,8 @@ from time import sleep
 
 from ambari_client import AmbariClient
 from ambari_error import AmbariError
-from sh_client import HstClient,AmbariServer
-from sh_error import HstError,AmbariServerError
+from sh_client import HstClient,AmbariServer,SshClient,AmbariAgent
+from sh_error import ShError,SshError
 
 
 def print_help():
@@ -43,6 +43,7 @@ def main(argv):
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
         #hst = HstClient()
         #ambari_server = AmbariServer()
+        aa = AmbariAgent("34.254.55.199","cloudbreak","ahegedus")
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -52,30 +53,33 @@ def main(argv):
     except AmbariError as e:
         print(e.message)
         exit(1)
-    except HstError as e:
+    except SshError as e:
         print(e.message)
         exit(1)
-    except AmbariServerError as e:
+    except ShError as e:
         print(e.message)
         exit(1)
 
     try:
         # hst.capture_bundle()
-        # ac.turn_on_maintenance_mode_for_service("KNOX")
+        #ac.turn_on_maintenance_mode_for_service("KNOX")
         # ac.switch_service_state("INSTALLED","KNOX")
         # sleep(5)
         # ac.switch_service_state("STARTED","KNOX")
         # ac.turn_off_maintenance_mode_for_service("KNOX")
         # ambari_server.stop()
         # ambari_server.start()
-        print ac.get_hosts()
+        for host in ac.get_hosts():
+            aa = AmbariAgent(host,"root")
+            aa.stop()
+            aa.start()
     except AmbariError as e:
         print(e.message)
         exit(1)
-    except HstError as e:
+    except ShError as e:
         print(e.message)
         exit(1)
-    except AmbariServerError as e:
+    except SshError as e:
         print(e.message)
         exit(1)
 

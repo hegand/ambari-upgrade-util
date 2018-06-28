@@ -1,5 +1,14 @@
-class HstError(Exception):
+class ShError(Exception):
   pass
 
-class AmbariServerError(Exception):
+
+class HstError(ShError):
+  pass
+
+
+class AmbariServerError(ShError):
+  pass
+
+
+class SshError(Exception):
   pass
