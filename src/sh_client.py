@@ -112,8 +112,10 @@ class SshClient(object):
             raise TypeError("Command must be string or list")
         if runasremoteuser:
             _command = ["sudo","-u",runasremoteuser] + _command
+        _command = self.base_command + _command
         try:
-            check_output(self.base_command + _command)
+            print("Running command {0}".format(_command))
+            check_output(_command)
         except CalledProcessError as e:
             raise SshError(e.message)
 
