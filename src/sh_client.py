@@ -34,7 +34,7 @@ class ShClient(object):
         try:
             check_output(["TERM=dumb"] + _command)
         except CalledProcessError as e:
-            raise SshError(e.message)
+            raise ShError(e.message)
 
 
 class HstClient(ShClient):
@@ -46,7 +46,7 @@ class HstClient(ShClient):
             print("Capturing smartsense bundle...")
             self.run([self.client_path,"capture"],"root")
             print("Smartsense boundle captured")
-        except CalledProcessError as e:
+        except ShError as e:
             raise HstError("Smartsense capture has been failed, please check hst logs for details")
 
 
@@ -65,25 +65,26 @@ class AmbariServer(ShClient):
             if self.running():
                 raise AmbariServerError("Stopping ambari-server was not successful, please check")
             print("Ambari server has been stopped successfully")
-        except CalledProcessError as e:
+        except ShError as e:
             raise AmbariServerError("Some problems have been occurred during stopping ambari-server")
 
     def start(self):
         try:
             print("Starting ambari-server...")
             self.run([self.client_path,"start"],"root")
-            sleep(10)
+            sleep(5)
             if not self.running():
                 raise AmbariServerError("Starting ambari-server was not successful, please check")
             print("Ambari server has been started successfully")
-        except CalledProcessError as e:
+        except ShError as e:
             raise AmbariServerError("Some problems have been occurred during starting ambari-server")
 
     def running(self):
         try:
             self.run(["[ -f /var/run/ambari-server/ambari-server.pid ] && exit || exit 1"],"root")
+            self.run(["ambari-server","status"],"root")
             return True
-        except CalledProcessError as e:
+        except ShError as e:
             return False
 
 
@@ -130,7 +131,7 @@ class AmbariAgent(SshClient):
             self.run(["ambari-agent","stop"],"root")
         else:
             raise SshError("Ambari-agent is not running on {0}".format(self.hostname))
-        sleep(10)
+        sleep(5)
         if self.running():
             raise SshError("Stopping ambari-agent was not successful on {0}, please check".format(self.hostname))
         print("Ambari-agent has been stopped successfully on {0}".format(self.hostname))
