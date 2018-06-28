@@ -72,13 +72,13 @@ def main(argv):
             sleep(5)
             ac.start_service(service)
             ac.turn_off_maintenance_mode_for_service(service)
-        # asc.stop()
-        # asc.start()
-        # for host, ssh in ssh_clients.iteritems():
-        #     print("SSH into {0} host".format(host))
-        #     aa = AmbariAgent(ssh)
-        #     aa.stop()
-        #     aa.start()
+        asc.stop()
+        asc.start()
+        for host, ssh in ssh_clients.iteritems():
+            print("SSH into {0} host".format(host))
+            aa = AmbariAgent(ssh)
+            aa.stop()
+            aa.start()
     except AmbariError as e:
         print(e.message)
         exit(1)
