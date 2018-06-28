@@ -43,7 +43,6 @@ def main(argv):
         ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
         #hst = HstClient()
         #ambari_server = AmbariServer()
-        aa = AmbariAgent("34.254.55.199","cloudbreak","ahegedus")
     except OSError as e:
         print(e.strerror)
         exit(1)
