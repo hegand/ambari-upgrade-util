@@ -32,7 +32,7 @@ class ShClient(object):
         if runasuser is not None:
             _command = ["sudo","-u",runasuser] + _command
         try:
-            check_output(["TERM=dumb"] + _command)
+            check_output(_command)
         except CalledProcessError as e:
             raise ShError(e.message)
 
