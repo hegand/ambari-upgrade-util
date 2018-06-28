@@ -39,7 +39,11 @@ def main(argv):
             print("Please set the correct permission on the config file, aborting...")
             exit(1)
         config = json.loads(open(config_file, "r").read())
-        ac = AmbariClient(config["hostname"],config["port"],config["cluster_name"],base64.b64encode("{0}:{1}".format(config["user"],config["password"])),config["ssl"])
+        ac = AmbariClient(config["hostname"]\
+                          ,config["port"]\
+                          ,config["cluster_name"]\
+                          ,base64.b64encode("{0}:{1}".format(config["user"],config["password"]))\
+                          ,config["ssl"])
         shc = ShClient()
         hst = HstClient(shc)
         asc = AmbariServerClient(shc)
@@ -72,6 +76,7 @@ def main(argv):
         # asc.stop()
         # asc.start()
         for host, ssh in ssh_clients.iteritems():
+            print("SSH into {0} host".format(host))
             aa = AmbariAgent(ssh)
             aa.stop()
             aa.start()
