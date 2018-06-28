@@ -29,7 +29,7 @@ class ShClient(object):
             _command = command
         else:
             raise TypeError("Command must be string or list")
-        if runasuser:
+        if runasuser is not None:
             _command = ["sudo","-u",runasuser] + _command
         try:
             check_output(["TERM=dumb"] + _command)
@@ -110,7 +110,7 @@ class SshClient(object):
             _command = command
         else:
             raise TypeError("Command must be string or list")
-        if runasremoteuser:
+        if runasremoteuser is not None:
             _command = ["sudo","-u",runasremoteuser] + _command
         _command = self.base_command + _command
         try:
