@@ -61,6 +61,12 @@ class AmbariClient(object):
     def put(self, url, data):
         return self.request(url, data, "PUT")
 
+    def put_json(self,url,data):
+        try:
+            return json.loads(self.put(url,data))
+        except ValueError as e:
+            raise AmbariError("Server response is not valid or empty, please check")
+
     def get_hosts(self):
         url = "{0}hosts/".format(self.base_url)
         resp = self.get_json(url)
@@ -81,6 +87,10 @@ class AmbariClient(object):
         url = "{0}services/{1}".format(self.base_url,service_name)
         return self.get_json(url)
 
+    def get_request_info(self, reqid):
+        url = "{0}requests/{1}".format(self.base_url,reqid)
+        return self.get_json(url)
+
     def get_service_maintenance_state(self, service_name):
         try:
             return self.get_service_info(service_name)["ServiceInfo"]["maintenance_state"]
@@ -90,6 +100,12 @@ class AmbariClient(object):
     def get_service_state(self, service_name):
         try:
             return self.get_service_info(service_name)["ServiceInfo"]["state"]
+        except KeyError as e:
+            raise AmbariError("Server response is not valid or empty, please check")
+
+    def get_request_state(self, reqid):
+        try:
+            return self.get_request_info(reqid)["Requests"]["request_status"]
         except KeyError as e:
             raise AmbariError("Server response is not valid or empty, please check")
 
@@ -134,14 +150,18 @@ class AmbariClient(object):
             raise AmbariError("{0} is already in {1} state on this cluster".format(service_name,action))
         url = "{0}services/{1}".format(self.base_url,service_name)
         payload = ServiceStartStopPayloadTemplate(action,self.cluster_name,service_name).get()
-        self.put(url, payload)
+        resp = self.put_json(url, payload)
+        try:
+            reqid = resp["Requests"]["id"]
+        except KeyError as e:
+            raise AmbariError("Server response is not valid or empty, please check")
         i = 0
         k = False
         while i<50:
-            state = self.get_service_state(service_name)
+            state = self.get_request_state(reqid)
             i = i+1
-            print("STOPPED" if state == "INSTALLED" else state)
-            if state == action:
+            print(state)
+            if state == "COMPLETED":
                 k=True
                 break
             sleep(6)

@@ -25,6 +25,7 @@ class ServiceStartStopPayloadTemplate(object):
     def get_json(self):
         return json.loads(self.payload)
 
+
 class ServiceMaintenanceModePayloadTemplate(object):
     def __init__(self, action, service_name):
         self.payload = '' + \

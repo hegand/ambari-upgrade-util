@@ -65,20 +65,20 @@ def main(argv):
         exit(1)
 
     try:
-        hst.capture_bundle()
-        for service in ["SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
+        # hst.capture_bundle()
+        for service in ["KNOX","SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
             ac.turn_on_maintenance_mode_for_service(service)
             ac.stop_service(service)
             sleep(5)
             ac.start_service(service)
             ac.turn_off_maintenance_mode_for_service(service)
-        asc.stop()
-        asc.start()
-        for host, ssh in ssh_clients.iteritems():
-            print("SSH into {0} host".format(host))
-            aa = AmbariAgent(ssh)
-            aa.stop()
-            aa.start()
+        # asc.stop()
+        # asc.start()
+        # for host, ssh in ssh_clients.iteritems():
+        #     print("SSH into {0} host".format(host))
+        #     aa = AmbariAgent(ssh)
+        #     aa.stop()
+        #     aa.start()
     except AmbariError as e:
         print(e.message)
         exit(1)
