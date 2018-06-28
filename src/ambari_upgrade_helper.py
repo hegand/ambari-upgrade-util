@@ -66,11 +66,12 @@ def main(argv):
 
     try:
         hst.capture_bundle()
-        # ac.turn_on_maintenance_mode_for_service("KNOX")
-        # ac.switch_service_state("INSTALLED","KNOX")
-        # sleep(5)
-        # ac.switch_service_state("STARTED","KNOX")
-        # ac.turn_off_maintenance_mode_for_service("KNOX")
+        for service in ["SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
+            ac.turn_on_maintenance_mode_for_service(service)
+            ac.stop_service(service)
+            sleep(5)
+            ac.stop_service(service)
+            ac.turn_off_maintenance_mode_for_service(service)
         asc.stop()
         asc.start()
         for host, ssh in ssh_clients.iteritems():

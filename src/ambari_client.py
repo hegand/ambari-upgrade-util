@@ -148,3 +148,9 @@ class AmbariClient(object):
         if not k:
             raise AmbariError("Changing {0} service state to {1} on {2} cluster was not successful".format(service_name,action, self.cluster_name))
         return
+
+    def stop_service(self, service_name):
+        self.switch_service_state("INSTALLED",service_name)
+
+    def start_service(self, service_name):
+        self.switch_service_state("STARTED",service_name)
