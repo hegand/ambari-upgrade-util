@@ -69,7 +69,7 @@ def main(argv):
         # ambari_server.stop()
         # ambari_server.start()
         for host in ac.get_hosts():
-            aa = AmbariAgent(host, "root")
+            aa = AmbariAgent(host, None, "root")
             aa.stop()
             aa.start()
     except AmbariError as e:
