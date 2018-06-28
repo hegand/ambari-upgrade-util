@@ -137,14 +137,14 @@ class AmbariClient(object):
         self.put(url, payload)
         i = 0
         k = False
-        while i<10:
+        while i<20:
             state = self.get_service_state(service_name)
             i = i+1
             print("STOPPED" if state == "INSTALLED" else state)
             if state == action:
                 k=True
                 break
-            sleep(10)
+            sleep(6)
         if not k:
             raise AmbariError("Changing {0} service state to {1} on {2} cluster was not successful".format(service_name,action, self.cluster_name))
         return
