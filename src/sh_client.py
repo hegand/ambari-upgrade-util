@@ -114,7 +114,7 @@ class SshClient(object):
             _command = ["sudo","-u",runasremoteuser] + _command
         _command = self.base_command + _command
         try:
-            print("Running command {0}".format(_command))
+            #print("Running command {0}".format(_command))
             check_output(_command)
         except CalledProcessError as e:
             raise SshError(e.message)
