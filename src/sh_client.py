@@ -12,18 +12,17 @@ class ShClient(object):
         self.checking()
         self.sudo = self.checking_sudo()
 
-    def checking(self):
+    @staticmethod
+    def checking():
         try:
-            self.run("whoami")
+            check_output("whoami")
         except CalledProcessError as e:
             raise ShError("Some problems occurred during {0} initialization: {1}".format(self.__class__.__name__, e.message))
 
-    def checking_sudo(self):
+    @staticmethod
+    def checking_sudo():
         try:
-            if self.run(["sudo","whoami"]) == 'root':
-                return True
-            else:
-                return False
+            return check_output(["sudo","whoami"]) == 'root'
         except CalledProcessError as e:
             return False
 
