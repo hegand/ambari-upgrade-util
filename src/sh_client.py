@@ -17,7 +17,7 @@ class ShClient(object):
         try:
             check_output("whoami")
         except CalledProcessError as e:
-            raise ShError("Some problems occurred during {0} initialization: {1}".format(self.__class__.__name__, e.message))
+            raise ShError("Some problems occurred during ShClient initialization: {0}".format(e.message))
 
     @staticmethod
     def checking_sudo():
