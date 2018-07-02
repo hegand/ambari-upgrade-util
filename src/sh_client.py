@@ -22,7 +22,7 @@ class ShClient(object):
     @staticmethod
     def checking_sudo():
         try:
-            return check_output(["sudo","whoami"]) == 'root'
+            return check_output(["sudo","whoami"]).split("\n")[:-1] == 'root'
         except CalledProcessError as e:
             return False
 
