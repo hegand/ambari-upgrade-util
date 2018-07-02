@@ -42,7 +42,7 @@ class ShClient(object):
         return _command
 
     def run(self,command,runasuser=None,shell=False):
-        if runasuser is not None and not self.sudo():
+        if runasuser is not None and not self.sudo:
             raise ShError("The current user does not have sudo right")
         _command = self.construct_command(command,runasuser)
         try:
