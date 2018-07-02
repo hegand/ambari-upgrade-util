@@ -48,6 +48,7 @@ def main(argv):
         hst = HstClient(shc)
         asc = AmbariServerClient(shc)
         ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
+        bckp_client = BackupClient(shc,"000122","~/backup")
     except OSError as e:
         print(e.strerror)
         exit(1)
@@ -66,19 +67,20 @@ def main(argv):
 
     try:
         # hst.capture_bundle()
-        for service in ["KNOX","SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
-            ac.turn_on_maintenance_mode_for_service(service)
-            ac.stop_service(service)
-            sleep(5)
-            ac.start_service(service)
-            ac.turn_off_maintenance_mode_for_service(service)
-        asc.stop()
-        asc.start()
-        for host, ssh in ssh_clients.iteritems():
-            print("SSH into {0} host".format(host))
-            aa = AmbariAgent(ssh)
-            aa.stop()
-            aa.start()
+        # for service in ["KNOX","SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
+        #     ac.turn_on_maintenance_mode_for_service(service)
+        #     ac.stop_service(service)
+        #     sleep(5)
+        #     ac.start_service(service)
+        #     ac.turn_off_maintenance_mode_for_service(service)
+        # asc.stop()
+        # asc.start()
+        # for host, ssh in ssh_clients.iteritems():
+        #     print("SSH into {0} host".format(host))
+        #     aa = AmbariAgent(ssh)
+        #     aa.stop()
+        #     aa.start()
+        bckp_client.create_backup()
     except AmbariError as e:
         print(e.message)
         exit(1)
