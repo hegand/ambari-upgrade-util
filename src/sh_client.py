@@ -22,7 +22,7 @@ class ShClient(object):
     @staticmethod
     def checking_sudo():
         try:
-            return check_output("sudo whoami").split("\n")[0] == 'root'
+            return check_output(["sudo", "whoami"]).split("\n")[0] == 'root'
         except CalledProcessError as e:
             return False
 
@@ -41,7 +41,7 @@ class ShClient(object):
         if runasuser is not None and not self.is_sudo:
             raise ShError("The current user does not have sudo right")
         _command = self.construct_command(command, runasuser)
-        if shell:
+        if not shell:
             _command = shlex.split(_command)
         try:
             return check_output(_command, shell=shell)
