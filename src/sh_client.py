@@ -179,7 +179,8 @@ class BackupClient(object):
         files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])
         self.create_backup_dir()
         _tar_command = "tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}".format(self.backup_dir, tms, files)
-        self.holland_client.create_backup(_tar_command,"root")
+        self.sh_client.run(_tar_command,"root")
+        self.holland_client.create_backup()
         self.sh_client.run("cp -aL {0} {1}".format(self.holland_client.get_newest_backup_dir(), self.backup_dir), "root")
 
 
