@@ -176,7 +176,7 @@ class BackupClient(object):
         _command = ("readlink -e /etc/ambari-* /etc/smartsense* " +
                    "/etc/hst /etc/yum.repos.d /usr/hdp/current/zeppelin-server/notebook " +
                    "/etc/zeppelin /var/lib/ambari-server/ambari-env.sh")
-        files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])gi
+        files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])
         self.create_backup_dir()
         _tar_command = shlex.split("tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}"\
                                   .format(self.backup_dir,tms,files))
