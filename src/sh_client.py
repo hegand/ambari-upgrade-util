@@ -199,7 +199,7 @@ class HollandClient(object):
         self.exec_path = exec_path
 
     def create_backup(self,backupset="default"):
-        self.run("backup {1}".format(backupset), "root")
+        self.run("backup {0}".format(backupset), "root")
 
     def run(self, command, runasuser):
         self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
