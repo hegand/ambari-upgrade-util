@@ -29,7 +29,7 @@ class ShClient(object):
     @staticmethod
     def construct_command(command, runasuser=None):
         if type(command) is not str:
-            raise ShError("Command must be string or list")
+            raise ShError("Command must be string")
         _command = copy.deepcopy(command)
         if runasuser == "root":
             _command = "sudo {0}".format(_command)
@@ -190,7 +190,7 @@ class HollandClient(object):
         self.exec_path = exec_path
 
     def create_backup(self,backupset="default"):
-        self.sh_client.run(self.exec_path,["backup",backupset],"root")
+        self.sh_client.run(self.exec_path,"backup {0}".format(backupset),"root")
 
     def get_base_backup_dir(self,backupset="default"):
         return "{0}/{1}".format(self.sh_client.run("/bin/grep -r 'backup_dir' /etc/holland/holland.conf", "root").split(" = ")[1].split("\n")[0],backupset)
