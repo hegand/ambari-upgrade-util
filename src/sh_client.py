@@ -187,10 +187,11 @@ class BackupClient(object):
                    "/etc/zeppelin /var/lib/ambari-server/ambari-env.sh")
         files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])
         self.create_backup_dir()
-        _tar_command = "tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}".format(self.backup_dir, tms, files)
+        _tar_command = "tar --ignore-failed-read -czf {0}backup-files_{1}.tar.gz {2}".format(self.backup_dir, tms, files)
         self.sh_client.run(_tar_command,"root")
         self.holland_client.create_backup()
         self.sh_client.run("cp -aL {0} {1}".format(self.holland_client.get_newest_backup_dir(), self.backup_dir), "root")
+        self.sh_client.run("tar -czf {0}.tar.gz {1} && rm -rf {1}".format(self.backup_dir[:-1],self.backup_dir), "root")
 
 
 class HollandClient(object):
