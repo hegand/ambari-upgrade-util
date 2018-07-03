@@ -48,7 +48,7 @@ def main(argv):
         # hst = HstClient(shc)
         # asc = AmbariServerClient(shc)
         # ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
-        bckp_client = BackupClient(shc,"000122","~/backup")
+        bckp_client = BackupClient(shc,"000122","/root/backup")
     except OSError as e:
         print(e.strerror)
         exit(1)
