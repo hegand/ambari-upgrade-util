@@ -29,7 +29,7 @@ class ShClient(object):
     @staticmethod
     def construct_command(command, runasuser=None):
         if type(command) is not str:
-            raise ShError("Command must be string")
+            raise ShError("Command must be string, but it is a {0}".format(type(command)))
         _command = copy.deepcopy(command)
         if runasuser == "root":
             _command = "sudo {0}".format(_command)
@@ -176,7 +176,7 @@ class BackupClient(object):
         _command = ("readlink -e /etc/ambari-* /etc/smartsense* " +
                    "/etc/hst /etc/yum.repos.d /usr/hdp/current/zeppelin-server/notebook " +
                    "/etc/zeppelin /var/lib/ambari-server/ambari-env.sh")
-        files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])
+        files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])gi
         self.create_backup_dir()
         _tar_command = shlex.split("tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}"\
                                   .format(self.backup_dir,tms,files))
