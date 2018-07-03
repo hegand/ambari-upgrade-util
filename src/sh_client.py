@@ -79,10 +79,13 @@ class HstClient(object):
     def capture_bundle(self):
         try:
             print("Capturing smartsense bundle...")
-            self.sh_client.run([self.exec_path, "capture"], "root")
+            self.run("capture", "root")
             print("Smartsense boundle captured")
         except ShError as e:
             raise HstError("Smartsense capture has been failed, please check hst logs for details")
+
+    def run(self, command, runasuser):
+        self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
 
 
 class AmbariServerClient(object):
@@ -94,7 +97,7 @@ class AmbariServerClient(object):
         try:
             print("Stopping ambari-server...")
             if self.running():
-                self.sh_client.run([self.exec_path, "stop"], "root")
+                self.run("stop", "root")
             else:
                 raise AmbariServerError("Ambari server is not running")
             sleep(10)
@@ -107,13 +110,16 @@ class AmbariServerClient(object):
     def start(self):
         try:
             print("Starting ambari-server...")
-            self.sh_client.run([self.exec_path, "start"], "root")
+            self.run("start", "root")
             sleep(10)
             if not self.running():
                 raise AmbariServerError("Starting ambari-server was not successful, please check")
             print("Ambari server has been started successfully")
         except ShError as e:
             raise AmbariServerError("Some problems have been occurred during starting ambari-server")
+
+    def run(self, command, runasuser):
+        self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
 
     def running(self):
         try:
@@ -131,7 +137,7 @@ class AmbariAgent(object):
     def stop(self):
         print("Stopping ambari-agent...")
         if self.running():
-            self.sh_client.run([self.exec_path,"stop"],"root")
+            self.run("stop","root")
         else:
             raise SshError("Ambari-agent is not running")
         sleep(10)
@@ -142,13 +148,16 @@ class AmbariAgent(object):
     def start(self):
         print("Starting ambari-agent...")
         if not self.running():
-            self.sh_client.run([self.exec_path,"start"],"root")
+            self.run("start","root")
         else:
             raise SshError("Ambari-agent is already running")
         sleep(10)
         if not self.running():
             raise SshError("Starting ambari-agent was not successful, please check")
         print("Ambari-agent has been started successfully")
+
+    def run(self, command, runasuser):
+        self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
 
     def running(self):
         try:
@@ -190,7 +199,10 @@ class HollandClient(object):
         self.exec_path = exec_path
 
     def create_backup(self,backupset="default"):
-        self.sh_client.run(self.exec_path,"backup {0}".format(backupset),"root")
+        self.run("backup {1}".format(backupset), "root")
+
+    def run(self, command, runasuser):
+        self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
 
     def get_base_backup_dir(self,backupset="default"):
         return "{0}/{1}".format(self.sh_client.run("/bin/grep -r 'backup_dir' /etc/holland/holland.conf", "root").split(" = ")[1].split("\n")[0],backupset)
