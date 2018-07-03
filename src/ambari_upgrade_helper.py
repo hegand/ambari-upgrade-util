@@ -45,9 +45,9 @@ def main(argv):
                           ,base64.b64encode("{0}:{1}".format(config["user"],config["password"]))\
                           ,config["ssl"])
         shc = ShClient()
-        # hst = HstClient(shc)
-        # asc = AmbariServerClient(shc)
-        # ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
+        hst = HstClient(shc)
+        asc = AmbariServerClient(shc)
+        ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
         bckp_client = BackupClient(shc,"000122","/root/backup")
     except OSError as e:
         print(e.strerror)
@@ -66,20 +66,20 @@ def main(argv):
         exit(1)
 
     try:
-        # hst.capture_bundle()
-        # for service in ["KNOX","SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
-        #     ac.turn_on_maintenance_mode_for_service(service)
-        #     ac.stop_service(service)
-        #     sleep(5)
-        #     ac.start_service(service)
-        #     ac.turn_off_maintenance_mode_for_service(service)
-        # asc.stop()
-        # asc.start()
-        # for host, ssh in ssh_clients.iteritems():
-        #     print("SSH into {0} host".format(host))
-        #     aa = AmbariAgent(ssh)
-        #     aa.stop()
-        #     aa.start()
+        hst.capture_bundle()
+        for service in ["KNOX","SMARTSENSE","AMBARI_METRICS","AMBARI_INFRA"]:
+            ac.turn_on_maintenance_mode_for_service(service)
+            ac.stop_service(service)
+            sleep(5)
+            ac.start_service(service)
+            ac.turn_off_maintenance_mode_for_service(service)
+        asc.stop()
+        asc.start()
+        for host, ssh in ssh_clients.iteritems():
+            print("SSH into {0} host".format(host))
+            aa = AmbariAgent(ssh)
+            aa.stop()
+            aa.start()
         bckp_client.create_backup()
     except AmbariError as e:
         print(e.message)
