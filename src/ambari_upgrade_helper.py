@@ -45,9 +45,9 @@ def main(argv):
                           ,base64.b64encode("{0}:{1}".format(config["user"],config["password"]))\
                           ,config["ssl"])
         shc = ShClient()
-        hst = HstClient(shc)
-        asc = AmbariServerClient(shc)
-        ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
+        # hst = HstClient(shc)
+        # asc = AmbariServerClient(shc)
+        # ssh_clients = dict((host,SshClient(host, "root", "root")) for host in ac.get_hosts())
         bckp_client = BackupClient(shc,"000122","~/backup")
     except OSError as e:
         print(e.strerror)
