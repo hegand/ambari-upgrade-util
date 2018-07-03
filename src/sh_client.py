@@ -191,7 +191,8 @@ class BackupClient(object):
         self.sh_client.run(_tar_command,"root")
         self.holland_client.create_backup()
         self.sh_client.run("cp -aL {0} {1}".format(self.holland_client.get_newest_backup_dir(), self.backup_dir), "root")
-        self.sh_client.run("tar -czf {0}.tar.gz {1} && rm -rf {1}".format(self.backup_dir[:-1],self.backup_dir), "root")
+        self.sh_client.run("tar -czf {0}.tar.gz {1}".format(self.backup_dir[:-1],self.backup_dir), "root")
+        self.sh_client.run("rm -rf {0}".format(self.backup_dir), "root")
 
 
 class HollandClient(object):
