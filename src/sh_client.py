@@ -29,7 +29,7 @@ class ShClient(object):
     @staticmethod
     def construct_command(command, runasuser=None):
         if type(command) is not str:
-            raise ShError("Command must be string, but it is a {0}".format(type(command)))
+            raise ShError("Command must be string, but it is a {0}".format(type(command).__name__))
         _command = copy.deepcopy(command)
         if runasuser == "root":
             _command = "sudo {0}".format(_command)
@@ -178,8 +178,7 @@ class BackupClient(object):
                    "/etc/zeppelin /var/lib/ambari-server/ambari-env.sh")
         files = " ".join(self.sh_client.run(_command, "root", True).split("\n")[:-1])
         self.create_backup_dir()
-        _tar_command = shlex.split("tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}"\
-                                  .format(self.backup_dir,tms,files))
+        _tar_command = "tar --ignore-failed-read -cvzf {0}backup-files_{1}.tar.gz {2}".format(self.backup_dir, tms, files)
         self.holland_client.create_backup(_tar_command,"root")
         self.sh_client.run("cp -aL {0} {1}".format(self.holland_client.get_newest_backup_dir(), self.backup_dir), "root")
 
