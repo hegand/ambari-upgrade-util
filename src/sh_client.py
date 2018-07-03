@@ -29,7 +29,7 @@ class ShClient(object):
     @staticmethod
     def construct_command(command, runasuser=None):
         if type(command) is not str:
-            raise ShError("Command must be string, but it is a {0}".format(type(command).__name__))
+            raise ShError("Command must be string, but it is a {0}: {1}".format(type(command).__name__,command))
         _command = copy.deepcopy(command)
         if runasuser == "root":
             _command = "sudo {0}".format(_command)
