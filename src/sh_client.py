@@ -205,7 +205,7 @@ class HollandClient(object):
         self.sh_client.run("{0} {1}".format(self.exec_path, command), runasuser)
 
     def get_base_backup_dir(self,backupset="default"):
-        return "{0}/{1}".format(self.sh_client.run("/bin/grep -r 'backup_dir' /etc/holland/holland.conf", "root").split(" = ")[1].split("\n")[0],backupset)
+        return "{0}/{1}/".format(self.sh_client.run("/bin/grep -r 'backup_dir' /etc/holland/holland.conf", "root").split(" = ")[1].split("\n")[0],backupset)
 
     def get_newest_backup_dir(self,backupset="default"):
         return "{0}newest/".format(self.get_base_backup_dir(backupset))
