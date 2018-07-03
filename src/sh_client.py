@@ -167,7 +167,7 @@ class BackupClient(object):
 
     def create_backup_dir(self):
         try:
-            self.sh_client.run(["mkdir",self.backup_dir])
+            self.sh_client.run("mkdir {0}".format(self.backup_dir))
         except CalledProcessError as e:
             raise ShError(e.message)
 
