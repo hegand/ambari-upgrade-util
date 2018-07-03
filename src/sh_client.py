@@ -41,6 +41,7 @@ class ShClient(object):
         if runasuser is not None and not self.is_sudo:
             raise ShError("The current user does not have sudo right")
         _command = self.construct_command(command, runasuser)
+        print("Executing {0}".format(_command))
         if not shell:
             _command = shlex.split(_command)
         try:
